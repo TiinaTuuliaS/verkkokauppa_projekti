@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema({
     cartItems:[
         {
             quantity:{
-                typer: Number,
+                type: Number,
                 default: 1
             },
             product:{
@@ -38,4 +39,31 @@ const userSchema = new mongoose.Schema({
 // createdAt koska luotu, updatedAt koska muokattu
 }, {
     timestamps: true
+});
+
+// user model rakennetaan
+
+const User = mongoose.model("User", userSchema);
+
+// salasanan salaustoiminto hook bcryptillä ennen kuin tieto tallentuu tietokantaan
+
+userSchema.pre("save", async function (next) {
+    if(!this.isModified("password")) return next();
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt); //tämä muuttaa salasanan cryptatuksi tietokantaan
+        next()
+    } catch (error) {
+        next(error)
+    }
+
 })
+
+//metodi salasanojen vertailemiseen oikein/väärin
+userSchema.methods.comparePassword = async function (password) {
+    return bcrypt.compare(password, this.password);
+
+}
+
+export default User;

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+//luodaan user modeliin kaikki kentät mitä user muuttuja tarvitsee
 const userSchema = new mongoose.Schema({
     name:{
         type: String,

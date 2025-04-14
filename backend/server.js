@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 // routes
 import authRoutes from "./routes/auth.route.js";
 
+import { connectDB } from "./lib/db.js";
+
 dotenv.config();
 //luetaan .env tiedoston sisältö
 
@@ -15,4 +17,8 @@ app.use("/api/auth", authRoutes)
 
 app.listen(PORT, () => {
     console.log("Serveri käynnissä OSOITTEESSA http://localhost:" + PORT);
+
+    connectDB();
 });
+
+// 0zDQ4zKOIf6WtJDb

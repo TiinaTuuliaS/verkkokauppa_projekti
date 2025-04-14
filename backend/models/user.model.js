@@ -41,9 +41,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// user model rakennetaan
 
-const User = mongoose.model("User", userSchema);
 
 // salasanan salaustoiminto hook bcryptillä ennen kuin tieto tallentuu tietokantaan
 
@@ -64,6 +62,10 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);
 
-}
+};
+
+// user model rakennetaan
+
+const User = mongoose.model("User", userSchema);
 
 export default User;

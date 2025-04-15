@@ -78,5 +78,19 @@ export const login = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
-    res.send("Log out route called");
+    try {
+        const refreshToken = req.cookies.refreshToken;
+        if(refreshToken){
+            const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            await redis.del(`refresh_token:${decoded.userId}`);
+           
+        }
+
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
+        
+        res.json({message: "Logout onnistui"}).sendStatus(200);
+    } catch (error) {
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
 };

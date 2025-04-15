@@ -67,6 +67,7 @@ export const signup = async (req, res) => {
     }, message: "Käyttäjä luotu onnistuneesti!"
 });
     } catch (error) {
+        console.log("Virhe yhdistettäessä MongoDB tietokantaan", error.message);
         res.status(500).json({ message: error.message });
     }
 
@@ -74,7 +75,28 @@ export const signup = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-    res.send("Login route called");
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email })
+
+        if(user && (await user.comparePassword(password))) {
+            const {accessToken, refreshToken} = generateTokens(user._id)
+
+            await storeRefreshToken(user._id, refreshToken)
+            setCookies(res, accessToken, refreshToken)
+
+            res.json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            })
+        }
+    } catch (error) {
+        console.log("Error sisäänkirjautumiscontrollerissa", error.message);
+        res.status(500).json({ message: error.message });
+        
+    }
 }
 
 export const logout = async (req, res) => {

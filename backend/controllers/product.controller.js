@@ -1,5 +1,7 @@
 import Product from "../models/product.model.js";
 import { redis } from "../lib/redis.js";
+import cloudinary from '../lib/cloudinary.js';
+
 
 
 export const getAllProducts = async (req, res) => {
@@ -35,6 +37,34 @@ export const getFeaturedProducts = async (req, res) => {
         res.json(featuredProducts);
 
     } catch (error) {
+        console.log("Virhe tuotecontrollerissa", error.message);
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
+};
+
+//luodaan tuote tietokantaan ja käytetään cloudinarya kuvien tuomiseen
+export const createProduct = async (req, res) => {
+    try {
+        const {name, description, price, image, category} = req.body;
+
+        let cloudinaryResponse = null
+
+        if(image) {
+            cloudinaryResponse = await cloudinary.uploloader.upload(image, {folder: "products"})
+    } 
+
+    const product = await Product.create({
+        name,
+        description,
+        price,
+        image: cloudinaryResponse?.secure.url ? cloudinaryResponse.secure_url : "",
+        category
+    })
+
+    res.status(201).json(product);
+    }
+    
+    catch (error) {
         console.log("Virhe tuotecontrollerissa", error.message);
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }

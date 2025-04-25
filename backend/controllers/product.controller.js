@@ -99,3 +99,44 @@ export const deleteProduct = async (req, res) => {
     }
 
 }
+
+export const getRecommendedProducts = async (req, res) => {
+    try {
+        const products = await Product.aggregate([
+            {
+                $sample: {size: 3}
+            },
+            {
+                $project:{
+                    _id: 1,
+                    name: 1,
+                    description: 1,
+                    image : 1,
+                    price: 1
+                }
+            }
+        ])
+
+        res.json(products)
+
+    } catch (error) {
+        console.log("Virhe tuotecontrollerissa", error.message);
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
+}
+
+//hakee tuotteet gaterorioittain
+export const getProductsByCategory = async (req, res) => {
+    
+    const {category} = req.params; 
+    
+    try {
+        
+        const products = await Product.find({category});
+        res.json(products);
+
+    } catch (error) {
+        console.log("Virhe tuotecontrollerissa", error.message);
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
+    }

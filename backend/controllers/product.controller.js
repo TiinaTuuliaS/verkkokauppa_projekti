@@ -69,3 +69,33 @@ export const createProduct = async (req, res) => {
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
 };
+
+export const deleteProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id)
+
+        if(!product) {
+            return res.status(404).json({message: "Ei tuotetta"});
+        }
+        
+        if(product.image) {
+            const publicId = product.image.split("/").pop().split(".")[0]; //hakee kuvan id:n ja poistaa sen
+            try {
+                await cloudinary.uploader.destroy(`products/${publicId}`)
+                console.log("Kuva poistettu cloudinarystä")
+            } catch (error) {
+                console.log("Virhe kuvan poistossa cloudinarystä", error.message);
+            }
+
+        }
+
+        await product.findByIdAndDelete(req.params.id)
+
+        res.json({message: "Tuote poistettu onnistuneesti"})
+
+    } catch (error) {
+        console.log("Virhe tuotetteen poistocontrollerissa", error.message);
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
+
+}

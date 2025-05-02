@@ -1,4 +1,24 @@
+import Product from "../models/product.model.js";
 
+export const getCartProducts = async (req, res) => {
+    try {
+        const products = await Product.find({ _id: { $in: req.user.cartItems } });
+
+        //lisätään määrä jokaiselle tuotteelle
+
+        const cartItems = products.map(product => {
+            const item = req.user.cartItems.find(cartItem => cartItem.id == product.id);
+            return {...product.toJSON(),
+                quantity: item.quantity}
+            });
+            
+            res.json(cartItems)
+
+    } catch (error) {
+        console.log("Virhe ostoskorin tuotteiden haussa", error.message);
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
+};
 
 export const addToCart = async (req, res) => {
 try {
@@ -43,7 +63,7 @@ export const removeAllFromCart = async (req, res) => {
     
     };
 
-export const uodateQuantity = async (req, res) => {
+export const updateQuantity = async (req, res) => {
     try {
         const {id:productId} = req.params;
         const {quantity} = req.body;
@@ -71,3 +91,4 @@ export const uodateQuantity = async (req, res) => {
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
 };
+

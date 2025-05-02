@@ -140,3 +140,31 @@ export const getProductsByCategory = async (req, res) => {
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
     }
+
+export const toggleFeaturedProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if(product) {
+            product.isFeatured = !product.isFeatured;
+            const updatedProduct = await product.save();
+            // päivitetään cashe - redis
+            await updateFeaturedProductsCashe();
+            res.json(updatedProduct);
+        } else {
+            res.status(404).json({message: "Tuotetta ei löytynyt"});
+        }
+    } catch (error) {
+        console.log("Virhe tuotecontrollerissa", error.message);
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
+}
+
+async function updateFeaturedProductsCashe() {
+    try {
+        const featuredProducts = await Product.find({isFeatured: true}).lean();
+        await redis.set("featured_products", JSON.stringify(featuredProducts));
+    } catch (error) {
+        console.log("Virhe cashen päivittämisessä", error.message);
+        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+    }
+}

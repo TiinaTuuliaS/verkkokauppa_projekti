@@ -18,16 +18,18 @@ export const createCheckoutSession = async (req, res) => {
 
 			return {
 				price_data: {
-					currency: "usd",
+					currency: "usd", //tarkista voiko vaihtaa euroiksi
 					product_data: {
 						name: product.name,
-						images: [product.image],
+						images: [product.image],//array
 					},
 					unit_amount: amount,
 				},
 				quantity: product.quantity || 1,
 			};
 		});
+
+//käyttäjän kupongin tarkistus
 
 		let coupon = null;
 		if (couponCode) {
@@ -36,6 +38,8 @@ export const createCheckoutSession = async (req, res) => {
 				totalAmount -= Math.round((totalAmount * coupon.discountPercentage) / 100);
 			}
 		}
+
+//ostoskorinäkymä ''session''
 
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ["card"],
@@ -62,7 +66,7 @@ export const createCheckoutSession = async (req, res) => {
 				),
 			},
 		});
-
+//asiakas saa uuden kupongin jos ostaa 200€ tai enemmän
 		if (totalAmount >= 20000) {
 			await createNewCoupon(req.user._id);
 		}
@@ -127,16 +131,17 @@ async function createStripeCoupon(discountPercentage) {
 	return coupon.id;
 }
 
+//uuden kupongin luonti asiakkaalle ostoksesta
 async function createNewCoupon(userId) {
 	await Coupon.findOneAndDelete({ userId });
 
 	const newCoupon = new Coupon({
 		code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
 		discountPercentage: 10,
-		expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
+		expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 päivää tästä hetkestä
 		userId: userId,
 	});
-
+//kuponki tallennetaan mongodatabaseen
 	await newCoupon.save();
 
 	return newCoupon;

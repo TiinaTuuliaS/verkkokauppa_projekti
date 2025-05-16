@@ -18,7 +18,7 @@ export const createCheckoutSession = async (req, res) => {
 
 			return {
 				price_data: {
-					currency: "usd", //tarkista voiko vaihtaa euroiksi
+					currency: "usd", //tarkista voiko vaihtaa euroiksi!!
 					product_data: {
 						name: product.name,
 						images: [product.image],//array
@@ -72,8 +72,8 @@ export const createCheckoutSession = async (req, res) => {
 		}
 		res.status(200).json({ id: session.id, totalAmount: totalAmount / 100 });
 	} catch (error) {
-		console.error("Error processing checkout:", error);
-		res.status(500).json({ message: "Error processing checkout", error: error.message });
+		console.error("Virhe checkoutissa:", error);
+		res.status(500).json({ message: "Virhe checkoutissa", error: error.message });
 	}
 };
 
@@ -82,6 +82,7 @@ export const checkoutSuccess = async (req, res) => {
 		const { sessionId } = req.body;
 		const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+		// tarkistetaan että maksu on mennyt läpi
 		if (session.payment_status === "paid") {
 			if (session.metadata.couponCode) {
 				await Coupon.findOneAndUpdate(
@@ -95,8 +96,8 @@ export const checkoutSuccess = async (req, res) => {
 				);
 			}
 
-			// create a new Order
-			const products = JSON.parse(session.metadata.products);
+			// luodaan uusi tilaus
+			const products = JSON.parse(session.metadata.products); //käytetään tuotteen metadataa luotu checkout sessionissa
 			const newOrder = new Order({
 				user: session.metadata.userId,
 				products: products.map((product) => ({
@@ -104,24 +105,25 @@ export const checkoutSuccess = async (req, res) => {
 					quantity: product.quantity,
 					price: product.price,
 				})),
-				totalAmount: session.amount_total / 100, // convert from cents to dollars,
+				totalAmount: session.amount_total / 100, // senteistä dollareiksi
 				stripeSessionId: sessionId,
 			});
 
-			await newOrder.save();
+			await newOrder.save(); //uusi tilaus tallennetaan tietokantaan
 
 			res.status(200).json({
 				success: true,
-				message: "Payment successful, order created, and coupon deactivated if used.",
+				message: "Maksu onnistui, tilaus luotu- kiitos kun kävit ostoksilla!",
 				orderId: newOrder._id,
 			});
 		}
 	} catch (error) {
-		console.error("Error processing successful checkout:", error);
-		res.status(500).json({ message: "Error processing successful checkout", error: error.message });
+		console.error("Virhe tilauksen luomisessa:", error);
+		res.status(500).json({ message: "Virhe tilauksen luomisessa", error: error.message });
 	}
 };
 
+//luodaan kuponki stripeen
 async function createStripeCoupon(discountPercentage) {
 	const coupon = await stripe.coupons.create({
 		percent_off: discountPercentage,

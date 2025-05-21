@@ -26,7 +26,7 @@ export const getAnalyticsData = async () => {
 	};
 };
 
-//tämän analytiikkaosion kanssa taistelemisessa ja ymmärtämisessä meni kauan, koska data mongodb muodossa ja olen
+//tämän analytiikkaosion kanssa taistelemisessa ja ymmärtämisessä meni kauan, koska data mongodb syntax muodossa ja olen
 //käyttänyt sitä tosi vähän, mutta kuitenkin onnistui.
 
 export const getDailySalesData = async (startDate, endDate) => {

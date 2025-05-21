@@ -4,6 +4,8 @@ import { getAnalyticsData, getDailySalesData } from "../controllers/analytics.co
 
 const router = express.Router();
 
+
+//analytiikka vain adminille
 router.get("/", protectRoute, adminRoute, async (req, res) => {
 	try {
 		const analyticsData = await getAnalyticsData();
@@ -18,8 +20,8 @@ router.get("/", protectRoute, adminRoute, async (req, res) => {
 			dailySalesData,
 		});
 	} catch (error) {
-		console.log("Error in analytics route", error.message);
-		res.status(500).json({ message: "Server error", error: error.message });
+		console.log("Virhe analytiikka controllerissa", error.message);
+		res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
 	}
 });
 

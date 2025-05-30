@@ -51,7 +51,7 @@ const SignUpPage = () => {
 									value={formData.name}
 									onChange={(e) => setFormData({ ...formData, name: e.target.value })}
 									className="block w-full px-3 py-2 pl-10 bg-white border border-pink-300 rounded-md shadow-sm placeholder-pink-400 text-rose-900 focus:outline-none focus:ring-pink-400 focus:border-pink-400 sm:text-sm"
-									placeholder="........."
+									placeholder="Nimesi"
 								/>
 							</div>
 						</div>

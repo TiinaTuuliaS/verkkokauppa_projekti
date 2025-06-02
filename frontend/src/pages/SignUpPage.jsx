@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { UserPlus, Mail, Lock, User, ArrowRight, Loader } from "lucide-react";
 import { motion } from "framer-motion";
+import { useUserStore } from "../stores/useUserStore";
 
 const SignUpPage = () => {
 	const loading = false;
@@ -12,10 +13,16 @@ const SignUpPage = () => {
 		confirmPassword: "",
 	});
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		console.log(formData);
-	};
+	const { signup, user } = useUserStore();
+
+
+	//sisäänkirjautumisen submitti
+const handleSubmit = async (e) => {
+	e.preventDefault();
+	console.log("called here");
+	await signup(formData); // odotetaan, että signup suorittuu
+};
+
 
 	return (
 		<div className="flex flex-col justify-center min-h-screen py-12 sm:px-6 lg:px-8">

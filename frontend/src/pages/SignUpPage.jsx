@@ -13,16 +13,13 @@ const SignUpPage = () => {
 		confirmPassword: "",
 	});
 
-	const { signup, user } = useUserStore();
+	const { signup } = useUserStore();
 
-
-	//sisäänkirjautumisen submitti
-const handleSubmit = async (e) => {
-	e.preventDefault();
-	console.log("called here");
-	await signup(formData); // odotetaan, että signup suorittuu
-};
-
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		console.log("called here");
+		await signup(formData);
+	};
 
 	return (
 		<div className="flex flex-col justify-center min-h-screen py-12 sm:px-6 lg:px-8">
@@ -95,6 +92,7 @@ const handleSubmit = async (e) => {
 									id="password"
 									type="password"
 									required
+									autoComplete="new-password"
 									value={formData.password}
 									onChange={(e) => setFormData({ ...formData, password: e.target.value })}
 									className="block w-full px-3 py-2 pl-10 bg-white border border-pink-300 rounded-md shadow-sm placeholder-pink-400 text-rose-900 focus:outline-none focus:ring-pink-400 focus:border-pink-400 sm:text-sm"
@@ -115,6 +113,7 @@ const handleSubmit = async (e) => {
 									id="confirmPassword"
 									type="password"
 									required
+									autoComplete="new-password"
 									value={formData.confirmPassword}
 									onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
 									className="block w-full px-3 py-2 pl-10 bg-white border border-pink-300 rounded-md shadow-sm placeholder-pink-400 text-rose-900 focus:outline-none focus:ring-pink-400 focus:border-pink-400 sm:text-sm"

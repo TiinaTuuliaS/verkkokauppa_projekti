@@ -12,7 +12,7 @@ export const useUserStore = create((set, get) => ({
 
 		if (password !== confirmPassword) {
 			set({ loading: false });
-			return toast.error("Passwords do not match");
+			return toast.error("Salasanat eivät täsmää");
 		}
 
 		try {
@@ -20,7 +20,7 @@ export const useUserStore = create((set, get) => ({
 			set({ user: res.data, loading: false });
 		} catch (error) {
 			set({ loading: false });
-			toast.error(error.response.data.message || "An error occurred");
+			toast.error(error.response.data.message || "Virhe rekisteröitymisessä");
 		}
 	},
 	login: async (email, password) => {
@@ -32,7 +32,7 @@ export const useUserStore = create((set, get) => ({
 			set({ user: res.data, loading: false });
 		} catch (error) {
 			set({ loading: false });
-			toast.error(error.response.data.message || "An error occurred");
+			toast.error(error.response.data.message || "Virhe sisäänkirjautumisessa");
 		}
 	},
 

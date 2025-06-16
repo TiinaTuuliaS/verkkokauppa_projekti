@@ -1,9 +1,10 @@
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useUserStore } from "../stores/useUserStore";
 
 const Navbar = () => {
-	const user = false;
-	const isAdmin = false;
+	const {user, logout} = useUserStore();
+	const isAdmin = user?.role === "admin";
 
 	// Esimerkin vuoksi dummy cart
 	const cart = [1, 2]; // Tämä pitää korvata oikealla state/datalla
@@ -50,10 +51,14 @@ const Navbar = () => {
 						)}
 
 						{user ? (
-							<button className='bg-rose-600 hover:bg-rose-500 text-white py-2 px-4 rounded-md flex items-center transition duration-300 ease-in-out'>
-								<LogOut size={18} />
-								<span className='hidden sm:inline ml-2'>Kirjaudu ulos</span>
-							</button>
+						<button
+						onClick={logout}
+						className='bg-rose-600 hover:bg-rose-500 text-white py-2 px-4 rounded-md flex items-center transition duration-300 ease-in-out'
+						>
+						<LogOut size={18} />
+						<span className='hidden sm:inline ml-2'>Kirjaudu ulos</span>
+						</button>
+
 						) : (
 							<>
 								<Link
@@ -68,7 +73,7 @@ const Navbar = () => {
 									className='bg-pink-700 hover:bg-pink-600 text-white py-2 px-4 rounded-md flex items-center transition duration-300 ease-in-out'
 								>
 									<LogIn className='mr-2' size={18} />
-									Login
+									Kirjaudu
 								</Link>
 							</>
 						)}

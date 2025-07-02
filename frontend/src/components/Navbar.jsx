@@ -42,7 +42,7 @@ const Navbar = () => {
 
 						{isAdmin && (
 							<Link
-								to={"/admin"}
+								to={"/secret-dashboard"}
 								className='bg-rose-600 hover:bg-rose-500 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center'
 							>
 								<Lock className='inline-block mr-1' size={18} />

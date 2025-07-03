@@ -48,7 +48,7 @@ export const useProductStore = create((set) => ({
 			}));
 		} catch (error) {
 			set({ loading: false });
-			toast.error(error.response.data.error || "Failed to delete product");
+			toast.error(error.response.data.error || "Virhe tuotteen poistamisessa");
 		}
 	},
 

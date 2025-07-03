@@ -95,7 +95,8 @@ export const deleteProduct = async (req, res) => {
 
         }
 
-        await product.findByIdAndDelete(req.params.id)
+        await Product.findByIdAndDelete(req.params.id)
+
 
         res.json({message: "Tuote poistettu onnistuneesti"})
 

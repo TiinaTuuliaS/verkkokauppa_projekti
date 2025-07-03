@@ -44,31 +44,37 @@ export const getFeaturedProducts = async (req, res) => {
 
 //luodaan tuote tietokantaan ja käytetään cloudinarya kuvien tuomiseen
 export const createProduct = async (req, res) => {
-    try {
-        const {name, description, price, image, category} = req.body;
+  try {
+    console.log("Request body:", req.body); // Tulostaa saapuvan datan
 
-        let cloudinaryResponse = null
+    const { name, description, price, image, category } = req.body;
 
-        if(image) {
-            cloudinaryResponse = await cloudinary.uploader.upload(image, {folder: "products"})
-    } 
+    let cloudinaryResponse = null;
+
+    if (image) {
+      console.log("Uploading image to Cloudinary...");
+      cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
+      console.log("Cloudinary response:", cloudinaryResponse);
+    }
 
     const product = await Product.create({
-        name,
-        description,
-        price,
-        image: cloudinaryResponse?.secure.url ? cloudinaryResponse.secure_url : "",
-        category
-    })
+      name,
+      description,
+      price,
+      image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
+      category,
+    });
+
+    console.log("Product created:", product);
 
     res.status(201).json(product);
-    }
-    
-    catch (error) {
-        console.log("Virhe tuotecontrollerissa", error.message);
-        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
-    }
+  } catch (error) {
+    console.error("Virhe tuotecontrollerissa:", error);
+    res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+  }
 };
+
+
 
 export const deleteProduct = async (req, res) => {
     try {

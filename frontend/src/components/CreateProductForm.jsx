@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
+import { useProductStore } from "../stores/useProductStore";
 
 const categories = ["jeans", "t-shirts", "shoes", "glasses", "jackets", "suits", "bags"];
 
@@ -13,11 +14,30 @@ const CreateProductForm = () => {
 		image: "",
 	});
 
-	const loading = false;
+	const { createProduct, loading} = useProductStore();	
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(newProduct);
+		try {
+			await createProduct(newProduct);
+			setNewProduct({ name: "", description: "", price: "", category: "", image: "" });
+		} catch (error) {
+			console.log("Virhe tuotteen luomisessa", error.message);
+		}
+	};
+
+	/*
+  Kuvan lataamisen käsittelijä funktio
+*/
+	const handleImageChange = (e) => {
+		const file = e.target.files[0];
+		if(file) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setNewProduct({ ...newProduct, image: reader.result });
+			};
+			reader.readAsDataURL(file); //base 64 formaatti
+		}
 	};
 
 	return (
@@ -99,7 +119,8 @@ const CreateProductForm = () => {
 				</div>
 
 				<div className='mt-1 flex items-center'>
-					<input type='file' id='image' className='sr-only' accept='image/*' />
+					<input type='file' id='image' className='sr-only' accept='image/*'onChange={handleImageChange} />
+					
 					<label
 						htmlFor='image'
 						className='cursor-pointer bg-white py-2 px-3 border border-pink-300 rounded-md shadow-sm text-sm leading-4 font-medium text-rose-900 hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-400'
@@ -107,7 +128,7 @@ const CreateProductForm = () => {
 						<Upload className='h-5 w-5 inline-block mr-2' />
 						Lataa kuva
 					</label>
-					{newProduct.image && <span className='ml-3 text-sm text-rose-700'>Kuva ladattu</span>}
+					{newProduct.image && <span className='ml-3 text-sm text-rose-700'>Kuva ladattu!</span>}
 				</div>
 
 				<button

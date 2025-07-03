@@ -37,6 +37,7 @@ export const useProductStore = create((set) => ({
 		}
 	},
 
+    //funktio tuotteen poistamiselle
     deleteProduct: async (productId) => {
 		set({ loading: true });
 		try {
@@ -51,6 +52,7 @@ export const useProductStore = create((set) => ({
 		}
 	},
 
+    //tuote merkitään suosikiksi ''featured'' tietokannassa ja verkkokaupassa
     	toggleFeaturedProduct: async (productId) => {
 		set({ loading: true });
 		try {

@@ -1,9 +1,10 @@
 import { BarChart, PlusCircle, ShoppingBasket } from "lucide-react";
-import { use, useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnalyticsTab from "../components/AnalyticsTab";
 import ProductsList from "../components/ProductsList";
 import CreateProductForm from "../components/CreateProductForm";
+import { useProductStore } from "../stores/useProductStore";
 
 const tabs = [
 	{ id: "create", label: "Luo tuote", icon: PlusCircle },

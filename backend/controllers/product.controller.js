@@ -140,7 +140,7 @@ export const getProductsByCategory = async (req, res) => {
     try {
         
         const products = await Product.find({category});
-        res.json(products);
+         res.json({ products }); //tässä oli bugi palautti array ei objektia ennen res.json(products);
 
     } catch (error) {
         console.log("Virhe tuotecontrollerissa", error.message);

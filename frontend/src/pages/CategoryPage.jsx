@@ -32,7 +32,7 @@ const CategoryPage = () => {
 				>
 					{products?.length === 0 && (
 						<h2 className="text-3xl font-semibold text-rose-400 text-center col-span-full">
-							No products found
+							Ei vielä tuotteita
 						</h2>
 					)}
 

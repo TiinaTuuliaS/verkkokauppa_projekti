@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
 
 	const handleAddToCart = () => {
 		if (!user) {
-			toast.error("Please login to add products to cart", { id: "login" });
+			toast.error("Kirjaudu sisään tehdäksesi ostoksia!", { id: "login" });
 			return;
 		} else {
 			addToCart(product);

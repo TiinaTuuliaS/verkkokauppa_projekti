@@ -2,60 +2,60 @@ import { Minus, Plus, Trash } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
 
 const CartItem = ({ item }) => {
-	const { removeFromCart, updateQuantity } = useCartStore();
+  const { removeFromCart, updateQuantity } = useCartStore();
 
-	return (
-		<div className='rounded-lg border p-4 shadow-sm border-gray-700 bg-gray-800 md:p-6'>
-			<div className='space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0'>
-				<div className='shrink-0 md:order-1'>
-					<img className='h-20 md:h-32 rounded object-cover' src={item.image} />
-				</div>
-				<label className='sr-only'>Choose quantity:</label>
+  return (
+    <div className="flex flex-col rounded-lg border border-pink-300 bg-white/80 shadow-lg p-4 md:p-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="shrink-0 md:order-1">
+          <img
+            className="h-20 md:h-32 rounded-xl object-cover"
+            src={item.image}
+            alt={item.name}
+          />
+        </div>
 
-				<div className='flex items-center justify-between md:order-3 md:justify-end'>
-					<div className='flex items-center gap-2'>
-						<button
-							className='inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border
-							 border-gray-600 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2
-							  focus:ring-emerald-500'
-							onClick={() => updateQuantity(item._id, item.quantity - 1)}
-						>
-							<Minus className='text-gray-300' />
-						</button>
-						<p>{item.quantity}</p>
-						<button
-							className='inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border
-							 border-gray-600 bg-gray-700 hover:bg-gray-600 focus:outline-none 
-						focus:ring-2 focus:ring-emerald-500'
-							onClick={() => updateQuantity(item._id, item.quantity + 1)}
-						>
-							<Plus className='text-gray-300' />
-						</button>
-					</div>
+        <div className="flex flex-col flex-1 space-y-2 md:order-2 md:max-w-md">
+          <p className="text-lg font-semibold text-rose-800 hover:text-rose-600 hover:underline cursor-pointer">
+            {item.name}
+          </p>
+          <p className="text-sm text-pink-600">{item.description}</p>
 
-					<div className='text-end md:order-4 md:w-32'>
-						<p className='text-base font-bold text-emerald-400'>${item.price}</p>
-					</div>
-				</div>
+          <button
+            className="self-start text-sm font-medium text-red-500 hover:text-red-400 hover:underline flex items-center gap-1"
+            onClick={() => removeFromCart(item._id)}
+            aria-label={`Poista ${item.name} ostoskorista`}
+          >
+            <Trash size={16} />
+            Poista
+          </button>
+        </div>
 
-				<div className='w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md'>
-					<p className='text-base font-medium text-white hover:text-emerald-400 hover:underline'>
-						{item.name}
-					</p>
-					<p className='text-sm text-gray-400'>{item.description}</p>
+        <div className="flex items-center justify-between md:order-3 md:justify-end md:w-36 gap-4">
+          <div className="flex items-center gap-2">
+            <button
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-pink-300 bg-pink-100 text-pink-600 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              onClick={() => updateQuantity(item._id, item.quantity - 1)}
+              aria-label={`Vähennä ${item.name} määrää`}
+            >
+              <Minus size={16} />
+            </button>
+            <p className="text-lg font-semibold text-rose-800">{item.quantity}</p>
+            <button
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-pink-300 bg-pink-100 text-pink-600 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              onClick={() => updateQuantity(item._id, item.quantity + 1)}
+              aria-label={`Lisää ${item.name} määrää`}
+            >
+              <Plus size={16} />
+            </button>
+          </div>
 
-					<div className='flex items-center gap-4'>
-						<button
-							className='inline-flex items-center text-sm font-medium text-red-400
-							 hover:text-red-300 hover:underline'
-							onClick={() => removeFromCart(item._id)}
-						>
-							<Trash />
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+          <p className="text-lg font-bold text-pink-600">${item.price}</p>
+        </div>
+      </div>
+    </div>
+  );
 };
+
 export default CartItem;
+

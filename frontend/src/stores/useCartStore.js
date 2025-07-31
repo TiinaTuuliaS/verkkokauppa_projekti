@@ -2,6 +2,8 @@ import { create } from "zustand";
 import axios from "../lib/axios";
 import { toast } from "react-hot-toast";
 
+//ostoskori
+
 export const useCartStore = create((set, get) => ({
 	cart: [],
 	coupon: null,
@@ -30,7 +32,7 @@ export const useCartStore = create((set, get) => ({
 	removeCoupon: () => {
 		set({ coupon: null, isCouponApplied: false });
 		get().calculateTotals();
-		toast.success("Coupon removed");
+		toast.success("Kuponki poistettu");
 	},
 
 	getCartItems: async () => {
@@ -46,23 +48,26 @@ export const useCartStore = create((set, get) => ({
 	clearCart: async () => {
 		set({ cart: [], coupon: null, total: 0, subtotal: 0 });
 	},
+
+	//ostoskoriin lisäämisen funktio
 	addToCart: async (product) => {
 		try {
 			await axios.post("/cart", { productId: product._id });
-			toast.success("Product added to cart");
+			toast.success("Tuote ostoskorissa!"); //toast ilmoitus ostoskoriin lisäämisestä
 
+			//
 			set((prevState) => {
 				const existingItem = prevState.cart.find((item) => item._id === product._id);
 				const newCart = existingItem
 					? prevState.cart.map((item) =>
-							item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+							item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item //jos tuote jo korissa lisätään vain määrään +1
 					  )
 					: [...prevState.cart, { ...product, quantity: 1 }];
 				return { cart: newCart };
 			});
-			get().calculateTotals();
+			get().calculateTotals(); //kutsutaan funktio, joka laskee ostoskorin kokonaisumman
 		} catch (error) {
-			toast.error(error.response.data.message || "An error occurred");
+			toast.error(error.response.data.message || "Virhe ostoskorissa!");
 		}
 	},
 	removeFromCart: async (productId) => {
@@ -82,6 +87,8 @@ export const useCartStore = create((set, get) => ({
 		}));
 		get().calculateTotals();
 	},
+
+	//laskee ostoskorin kokonaisumman 
 	calculateTotals: () => {
 		const { cart, coupon } = get();
 		const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);

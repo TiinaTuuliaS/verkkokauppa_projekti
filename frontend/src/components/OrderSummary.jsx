@@ -41,7 +41,7 @@ const OrderSummary = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <p className="text-xl font-semibold text-rose-800">Order summary</p>
+      <p className="text-xl font-semibold text-rose-800">Tilauksen yhteenveto</p>
 
       <div className="space-y-4">
         <div className="space-y-2">
@@ -77,16 +77,16 @@ const OrderSummary = () => {
           whileTap={{ scale: 0.95 }}
           onClick={handlePayment}
         >
-          Proceed to Checkout
+          Kassalle
         </motion.button>
 
         <div className="flex items-center justify-center gap-2">
-          <span className="text-sm font-normal text-pink-400">or</span>
+          <span className="text-sm font-normal text-pink-400">tai</span>
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm font-medium text-pink-600 underline hover:text-pink-500 hover:no-underline"
           >
-            Continue Shopping
+            Takaisin ostoksille
             <MoveRight size={16} />
           </Link>
         </div>

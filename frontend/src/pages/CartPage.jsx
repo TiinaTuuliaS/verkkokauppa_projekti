@@ -50,6 +50,8 @@ const CartPage = () => {
 };
 export default CartPage;
 
+
+//tyhjä ostoskori - sivu
 const EmptyCartUI = () => (
 	<motion.div
 		className="flex flex-col items-center justify-center space-y-4 py-16"
@@ -58,15 +60,15 @@ const EmptyCartUI = () => (
 		transition={{ duration: 0.5 }}
 	>
 		<ShoppingCart className="h-24 w-24 text-pink-400" />
-		<h3 className="text-2xl font-semibold text-rose-800">Your cart is empty</h3>
+		<h3 className="text-2xl font-semibold text-rose-800">Ostokorisi on tyhjä</h3>
 		<p className="text-pink-400">
-			Looks like you {"haven't"} added anything to your cart yet.
+			Näyttää siltä että et {" ole "} lisännyt koriin mitään vielä
 		</p>
 		<Link
 			className="mt-4 rounded-md bg-pink-600 px-6 py-2 text-white transition-colors hover:bg-pink-500"
 			to="/"
 		>
-			Start Shopping
+			Aloita shoppailu
 		</Link>
 	</motion.div>
 );

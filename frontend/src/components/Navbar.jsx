@@ -22,7 +22,7 @@ const Navbar = () => {
 							to={"/"}
 							className='text-rose-900 hover:text-pink-600 transition duration-300 ease-in-out'
 						>
-							Home
+							Etusivu
 						</Link>
 
 						<Link

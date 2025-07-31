@@ -1,6 +1,8 @@
 import { Minus, Plus, Trash } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
 
+
+//tuotteen näkymä ostoskorissa
 const CartItem = ({ item }) => {
   const { removeFromCart, updateQuantity } = useCartStore();
 

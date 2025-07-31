@@ -75,6 +75,8 @@ export const useCartStore = create((set, get) => ({
 		set((prevState) => ({ cart: prevState.cart.filter((item) => item._id !== productId) }));
 		get().calculateTotals();
 	},
+
+	//määrän päivitys ostoskorissa
 	updateQuantity: async (productId, quantity) => {
 		if (quantity === 0) {
 			get().removeFromCart(productId);

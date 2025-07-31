@@ -7,6 +7,7 @@ const ProductCard = ({ product }) => {
 	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 
+	//tarkistaa onko käyttäjä kirjautunut
 	const handleAddToCart = () => {
 		if (!user) {
 			toast.error("Kirjaudu sisään tehdäksesi ostoksia!", { id: "login" });

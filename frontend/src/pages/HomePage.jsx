@@ -1,9 +1,9 @@
 import CategoryItem from "../components/CategoryItem";
 
 const categories = [
-	{ href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
-	{ href: "/t-shirts", name: "T-paidat", imageUrl: "/tshirts.jpg" },
-	{ href: "/glasses", name: "Glasses", imageUrl: "/glasses.png" },
+	{ href: "/korvakorut", name: "Korvakorut", imageUrl: "/korvakoru1.jpg" },
+	{ href: "/sormukset", name: "Sormukset", imageUrl: "/sormus1.jpg" },
+	{ href: "/aurinkolasit", name: "Aurinkolasit", imageUrl: "/lasit.jpeg" },
 	{ href: "/jackets", name: "Jackets", imageUrl: "/jackets.jpg" },
 	{ href: "/bags", name: "Bags", imageUrl: "/bags.jpg" },
 	{ href: "/kaulakorut", name: "Kaulakorut", imageUrl: "/kaulakoru1.jpg" },

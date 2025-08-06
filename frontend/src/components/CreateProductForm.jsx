@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
 import { useProductStore } from "../stores/useProductStore";
 
-const categories = ["jeans", "t-shirts", "glasses", "jackets", "bags", "kaulakorut"]; //jos muokkaat näitä pitää muokata myös homepage
+const categories = ["korvakorut", "sormukset", "aurinkolasit", "jackets", "bags", "kaulakorut"]; //jos muokkaat näitä pitää muokata myös homepage
 
 const CreateProductForm = () => {
 	const [newProduct, setNewProduct] = useState({

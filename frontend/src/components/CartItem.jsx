@@ -52,7 +52,7 @@ const CartItem = ({ item }) => {
             </button>
           </div>
 
-          <p className="text-lg font-bold text-pink-600">${item.price}</p>
+          <p className="text-lg font-bold text-pink-600">€{item.price}</p>
         </div>
       </div>
     </div>

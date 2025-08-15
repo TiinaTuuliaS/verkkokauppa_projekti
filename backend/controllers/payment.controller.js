@@ -18,7 +18,7 @@ export const createCheckoutSession = async (req, res) => {
 
 			return {
 				price_data: {
-					currency: "usd", //tarkista voiko vaihtaa euroiksi!!
+					currency: "eur", 
 					product_data: {
 						name: product.name,
 						images: [product.image],//array

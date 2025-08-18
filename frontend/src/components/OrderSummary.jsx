@@ -11,7 +11,7 @@ const stripePromise = loadStripe(
   "pk_test_51RNyRyBDQOWIa4uWLmhTsTPG7jUIU0Lj1A6F0zLMPOndrp8wNFVhQPkJwwKnEkyFobcxOO3LwLJitYgRFFY4aIDy000eHuouim"
 );
 
-//komponentti tilauksen yhteenvedolle
+//komponentti tilauksen yhteenvedolle ostoskorissa
 
 const OrderSummary = () => {
   const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
@@ -20,21 +20,24 @@ const OrderSummary = () => {
   const formattedSubtotal = subtotal.toFixed(2);
   const formattedTotal = total.toFixed(2);
   const formattedSavings = savings.toFixed(2);
-
+  
+  //funktio maksutapahtuman käsittelyä varten Stripessä
   const handlePayment = async () => {
-    const stripe = await stripePromise;
+    const stripe = await stripePromise; //stripen oman tilin public key otetaan käyttöön
+    //luodaan checkout session data, joka ottaa vastaan ostoskorin ja kuponkikoodin arraylla
     const res = await axios.post("/payments/create-checkout-session", {
       products: cart,
       couponCode: coupon ? coupon.code : null,
     });
 
+    //ostoskorinäkymä stripeen checkouttiin
     const session = res.data;
     const result = await stripe.redirectToCheckout({
-      sessionId: session.id,
+      sessionId: session.id, //session id koostuu backendissä paymencontrollerissa
     });
 
     if (result.error) {
-      console.error("Error:", result.error);
+      console.error("Virhe maksutapahtumassa:", result.error);
     }
   };
 

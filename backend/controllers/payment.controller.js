@@ -105,8 +105,8 @@ export const checkoutSuccess = async (req, res) => {
 					quantity: product.quantity,
 					price: product.price,
 				})),
-				totalAmount: session.amount_total / 100, // senteistä dollareiksi
-				stripeSessionId: sessionId,
+				totalAmount: session.amount_total / 100, // senteistä euroiksi
+				stripeSessionId: sessionId, //sessionId muodostuu
 			});
 
 			await newOrder.save(); //uusi tilaus tallennetaan tietokantaan

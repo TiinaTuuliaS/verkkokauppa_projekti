@@ -5,7 +5,7 @@ import { MoveRight } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "../lib/axios";
 
-//stripe public key maksuja varten, sandbox eli testitilassa
+//stripe public key maksuja varten ostoskoriin, sandbox eli testitilassa
 
 const stripePromise = loadStripe(
   "pk_test_51RNyRyBDQOWIa4uWLmhTsTPG7jUIU0Lj1A6F0zLMPOndrp8wNFVhQPkJwwKnEkyFobcxOO3LwLJitYgRFFY4aIDy000eHuouim"
@@ -50,14 +50,14 @@ const OrderSummary = () => {
       <div className="space-y-4">
         <div className="space-y-2">
           <dl className="flex items-center justify-between gap-4">
-            <dt className="text-base font-normal text-pink-600">Original price</dt>
-            <dd className="text-base font-medium text-rose-800">${formattedSubtotal}</dd>
+            <dt className="text-base font-normal text-pink-600">Alkuperäinen hinta</dt>
+            <dd className="text-base font-medium text-rose-800">€{formattedSubtotal}</dd>
           </dl>
 
           {savings > 0 && (
             <dl className="flex items-center justify-between gap-4">
-              <dt className="text-base font-normal text-pink-600">Savings</dt>
-              <dd className="text-base font-medium text-rose-600">-${formattedSavings}</dd>
+              <dt className="text-base font-normal text-pink-600">Säästö</dt>
+              <dd className="text-base font-medium text-rose-600">-€{formattedSavings}</dd>
             </dl>
           )}
 
@@ -70,8 +70,8 @@ const OrderSummary = () => {
             </dl>
           )}
           <dl className="flex items-center justify-between gap-4 border-t border-pink-300 pt-2">
-            <dt className="text-base font-bold text-rose-800">Total</dt>
-            <dd className="text-base font-bold text-pink-600">${formattedTotal}</dd>
+            <dt className="text-base font-bold text-rose-800">Yhteensä</dt>
+            <dd className="text-base font-bold text-pink-600">€{formattedTotal}</dd>
           </dl>
         </div>
 

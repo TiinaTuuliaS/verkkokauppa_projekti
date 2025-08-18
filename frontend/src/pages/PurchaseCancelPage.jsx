@@ -23,7 +23,7 @@ const PurchaseCancelPage = () => {
           </p>
           <div className="bg-pink-50 rounded-lg p-4 mb-6">
             <p className="text-sm text-rose-700 text-center">
-              Jos kohtasit ongelmia maksuprosessin aikana, ota yhteys tukeemme.
+              Jos kohtasit ongelmia maksuprosessin aikana, ota yhteyttä.
             </p>
           </div>
           <div className="space-y-4">

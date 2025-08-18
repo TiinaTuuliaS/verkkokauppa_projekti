@@ -43,7 +43,7 @@ const PurchaseSuccessPage = () => {
         height={window.innerHeight}
         gravity={0.1}
         style={{ zIndex: 99 }}
-        numberOfPieces={700}
+        numberOfPieces={720}
         recycle={false}
       />
 

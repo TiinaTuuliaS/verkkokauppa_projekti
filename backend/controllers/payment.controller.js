@@ -123,7 +123,7 @@ export const checkoutSuccess = async (req, res) => {
 	}
 };
 
-//luodaan kuponki stripeen
+//luodaan kuponki stripeen - stripe on minulle uusi joten stripe juttujen kanssa on pähkitty ja hähkitty 
 async function createStripeCoupon(discountPercentage) {
 	const coupon = await stripe.coupons.create({
 		percent_off: discountPercentage,
@@ -139,8 +139,8 @@ async function createNewCoupon(userId) {
 
 	const newCoupon = new Coupon({
 		code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
-		discountPercentage: 10,
-		expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 päivää tästä hetkestä
+		discountPercentage: 10, //aleprosentti
+		expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // voimassa 30 päivää tästä hetkestä
 		userId: userId,
 	});
 //kuponki tallennetaan mongodatabaseen

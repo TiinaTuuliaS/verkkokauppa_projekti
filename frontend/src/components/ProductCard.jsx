@@ -3,11 +3,12 @@ import { ShoppingCart } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
 
+// komponentti jolla näkyy tuote ja sen tiedot
 const ProductCard = ({ product }) => {
 	const { user } = useUserStore();
 	const { addToCart } = useCartStore();
 
-	//tarkistaa onko käyttäjä kirjautunut
+	// tarkistaa onko käyttäjä kirjautunut
 	const handleAddToCart = () => {
 		if (!user) {
 			toast.error("Kirjaudu sisään tehdäksesi ostoksia!", { id: "login" });
@@ -20,16 +21,28 @@ const ProductCard = ({ product }) => {
 	return (
 		<div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-pink-300 shadow-lg backdrop-blur-sm bg-white/80'>
 			<div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
-				<img className='object-cover w-full' src={product.image} alt='product image' />
+				<img
+					className='object-cover w-full'
+					src={product.image}
+					alt='product image'
+				/>
 				<div className='absolute inset-0 bg-pink-100 bg-opacity-20' />
 			</div>
 
 			<div className='mt-4 px-5 pb-5'>
-				<h5 className='text-xl font-semibold tracking-tight text-rose-800'>{product.name}</h5>
+				<h5 className='text-xl font-semibold tracking-tight text-rose-800'>
+					{product.name}
+				</h5>
+
+				<p className='mt-1 text-sm text-gray-600'>
+					{product.description}
+				</p>
 
 				<div className='mt-2 mb-5 flex items-center justify-between'>
 					<p>
-						<span className='text-3xl font-bold text-pink-600'>€{product.price}</span>
+						<span className='text-3xl font-bold text-pink-600'>
+							€{product.price}
+						</span>
 					</p>
 				</div>
 
@@ -47,3 +60,4 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+

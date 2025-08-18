@@ -4,7 +4,7 @@ const categories = [
 	{ href: "/korvakorut", name: "Korvakorut", imageUrl: "/korvakoru1.jpg" },
 	{ href: "/sormukset", name: "Sormukset", imageUrl: "/sormus1.jpg" },
 	{ href: "/aurinkolasit", name: "Aurinkolasit", imageUrl: "/lasit.jpeg" },
-	{ href: "/jackets", name: "Jackets", imageUrl: "/jackets.jpg" },
+	{ href: "/korusetit", name: "Korusetit", imageUrl: "/setti1.jpeg" },
 	{ href: "/rannekorut", name: "Rannekorut", imageUrl: "/rannekoru1.jpg" },
 	{ href: "/kaulakorut", name: "Kaulakorut", imageUrl: "/kaulakoru1.jpg" },
 ];

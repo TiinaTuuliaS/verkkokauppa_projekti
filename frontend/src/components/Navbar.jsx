@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
 
+//komponentti navigointipalkkiin
+
 const Navbar = () => {
 	const {user, logout} = useUserStore();
-	const isAdmin = user?.role === "admin";
+	const isAdmin = user?.role === "admin"; //tarkistetaan onko käyttäjä kirjautunut adminina
 
 	const { cart } = useCartStore();
 
@@ -14,7 +16,7 @@ const Navbar = () => {
 			<div className='container mx-auto px-4 py-3'>
 				<div className='flex flex-wrap justify-between items-center'>
 					<Link to='/' className='text-2xl font-bold text-rose-800 items-center space-x-2 flex'>
-						Dreamland
+						Dreamland- korukauppa
 					</Link>
 
 					<nav className='flex flex-wrap items-center gap-4'>

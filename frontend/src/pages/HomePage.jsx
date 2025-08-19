@@ -1,6 +1,10 @@
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import CategoryItem from "../components/CategoryItem";
+import FeaturedProducts from "../components/FeaturedProducts";
+import { useProductStore } from "../stores/useProductStore";
 
+// Tuotekategoriat
 const categories = [
   { href: "/korvakorut", name: "Korvakorut", imageUrl: "/korvakoru1.jpg" },
   { href: "/sormukset", name: "Sormukset", imageUrl: "/sormus1.jpg" },
@@ -11,6 +15,14 @@ const categories = [
 ];
 
 const HomePage = () => {
+  // Haetaan storesta tarvittavat funktiot ja tilat
+  const { fetchFeaturedProducts, products, loading } = useProductStore();
+
+  // Hae Featured Products kun komponentti renderöityy
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, [fetchFeaturedProducts]);
+
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-pink-50 to-pink-100 text-rose-900 overflow-hidden">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -32,15 +44,22 @@ const HomePage = () => {
           Viimeisimmät koruihastuksesi!
         </motion.p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Kategoriat */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {categories.map((category, index) => (
             <CategoryItem category={category} key={category.name} index={index} />
           ))}
         </div>
+
+        {/* Featured Products */}
+        {!loading && products?.length > 0 && (
+          <FeaturedProducts featuredProducts={products} />
+        )}
       </div>
     </div>
   );
 };
 
 export default HomePage;
+
 

@@ -80,6 +80,17 @@ export const useProductStore = create((set) => ({
 			toast.error(error.response.data.error || "Virhe featured toiminnossa");
 		}
 	},
+  //funktio joka hakee featured eli esittelyssä olevat tuottteet
+	fetchFeaturedProducts: async () => {
+		set({ loading: true });
+		try {
+			const response = await axios.get("/products/featured"); //axios pyyntö backendiin
+			set({ products: response.data, loading: false });
+		} catch (error) {
+			set({ error: "Tuotteita ei voitu hakea", loading: false });
+			console.log("Error featured tuotteita ei voitu hakea:", error);
+		}
+	},
    
 
 }));

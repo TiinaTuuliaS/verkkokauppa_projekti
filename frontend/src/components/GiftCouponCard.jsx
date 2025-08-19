@@ -4,8 +4,9 @@ import { useCartStore } from "../stores/useCartStore";
 
 const GiftCouponCard = () => {
   const [userInputCode, setUserInputCode] = useState("");
-  const { coupon, isCouponApplied, applyCoupon, getMyCoupon, removeCoupon } = useCartStore();
+  const { coupon, isCouponApplied, applyCoupon, getMyCoupon, removeCoupon } = useCartStore(); //haetaan cartstoressa luodut funktiot
 
+  //haetaan kuponki
   useEffect(() => {
     getMyCoupon();
   }, [getMyCoupon]);
@@ -62,7 +63,7 @@ const GiftCouponCard = () => {
         <div className="mt-4">
           <h3 className="text-lg font-medium text-rose-800">Kuponki tallennettu</h3>
           <p className="mt-2 text-sm text-pink-600">
-            {coupon.code} - {coupon.discountPercentage}% off
+            {coupon.code} - {coupon.discountPercentage}% alennusta
           </p>
           <motion.button
             type="button"

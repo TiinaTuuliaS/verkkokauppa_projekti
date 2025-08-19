@@ -21,7 +21,7 @@ export const useCartStore = create((set, get) => ({
 	},
 	applyCoupon: async (code) => {
 		try {
-			const response = await axios.post("/coupons/validate", { code });
+			const response = await axios.post("/coupons/validate", { code }); //kuponkikoodi validoidaan axiospyynnöllä
 			set({ coupon: response.data, isCouponApplied: true });
 			get().calculateTotals();
 			toast.success("Kuponki aktivoitu onnistuneesti");

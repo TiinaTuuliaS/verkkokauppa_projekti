@@ -135,7 +135,8 @@ async function createStripeCoupon(discountPercentage) {
 
 //uuden kupongin luonti asiakkaalle ostoksesta
 async function createNewCoupon(userId) {
-	await Coupon.findOneAndDelete({ userId });
+	await Coupon.findOneAndDelete({ userId });//käyttäjällä ei voi olla kuin 1 aktiivinen kuponki kerrallaan, edellinen kuponki poistetaan
+	//katso coupon.model
 
 	const newCoupon = new Coupon({
 		code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),

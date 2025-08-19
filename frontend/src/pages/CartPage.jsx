@@ -54,27 +54,28 @@ export default CartPage;
 //tyhjä ostoskori - sivu
 const EmptyCartUI = () => (
 	<motion.div
-		className="flex flex-col items-center justify-center space-y-4 py-16"
+		className="flex items-center justify-center py-16 px-4"
 		initial={{ opacity: 0, y: 20 }}
 		animate={{ opacity: 1, y: 0 }}
 		transition={{ duration: 0.5 }}
 	>
-		<ShoppingCart className="h-24 w-24 text-pink-500 drop-shadow-md" />
+		<div className="max-w-md w-full bg-white/90 backdrop-blur-md rounded-2xl shadow-lg border border-pink-200 p-8 text-center space-y-6">
+			<ShoppingCart className="h-24 w-24 text-pink-500 mx-auto drop-shadow-md" />
 
-		<h3 className="text-3xl font-bold text-rose-900 drop-shadow-sm">
-			Ostokorisi on tyhjä
-		</h3>
+			<h3 className="text-3xl font-bold text-rose-900 drop-shadow-sm">
+				Ostokorisi on tyhjä
+			</h3>
 
-		<p className="text-gray-600 text-center max-w-md">
-			Näyttää siltä, että et ole lisännyt vielä mitään koriin.
-		</p>
+			<p className="text-gray-700">
+				Näyttää siltä, että et ole lisännyt vielä mitään koriin.
+			</p>
 
-		<Link
-			className="mt-6 rounded-lg bg-pink-600 px-6 py-3 text-white font-semibold shadow-md transition hover:bg-pink-500 hover:shadow-lg"
-			to="/"
-		>
-			🚀 Aloita shoppailu
-		</Link>
+			<Link
+				className="inline-block w-full rounded-lg bg-pink-600 px-6 py-3 text-white font-semibold shadow-md transition hover:bg-pink-500 hover:shadow-lg"
+				to="/"
+			>
+				🚀 Aloita shoppailu
+			</Link>
+		</div>
 	</motion.div>
 );
-

@@ -15,12 +15,11 @@ const categories = [
 ];
 
 const HomePage = () => {
-  const { fetchFeaturedProducts, products, loading } = useProductStore();
+  const { fetchFeaturedProducts, featuredProducts, loading } = useProductStore();
 
-  // Hae Featured Products kerran, kun komponentti mountataan
   useEffect(() => {
     fetchFeaturedProducts();
-  }, []); // tyhjä dependency -> vain kerran
+  }, []);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-pink-50 to-pink-100 text-rose-900 overflow-hidden">
@@ -51,9 +50,11 @@ const HomePage = () => {
         </div>
 
         {/* Featured Products */}
-        {products?.length > 0 && <FeaturedProducts featuredProducts={products} />}
+        {featuredProducts?.length > 0 && (
+          <FeaturedProducts featuredProducts={featuredProducts} />
+        )}
         {loading && <p className="text-center text-lg text-gray-500">Ladataan tuotteita...</p>}
-        {!loading && products?.length === 0 && (
+        {!loading && featuredProducts?.length === 0 && (
           <p className="text-center text-lg text-gray-500">Ei suosikkituotteita tällä hetkellä.</p>
         )}
       </div>

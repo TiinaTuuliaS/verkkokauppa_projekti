@@ -2,8 +2,6 @@ import Product from "../models/product.model.js";
 import { redis } from "../lib/redis.js";
 import cloudinary from '../lib/cloudinary.js';
 
-
-
 export const getAllProducts = async (req, res) => {
     try {
         const products = await Product.find({}); //etsi kaikki tuotteet
@@ -16,23 +14,20 @@ export const getAllProducts = async (req, res) => {
 
 export const getFeaturedProducts = async (req, res) => {
     try {
-        let featuredProducts = await redis.get("featured_products"); //etsi kaikki tuotteet
-        if(!featuredProducts) {
+        let featuredProducts = await redis.get("featured_products"); 
+
+        if (featuredProducts) {
             return res.json(JSON.parse(featuredProducts));
         }
 
-        //jos festured tuotteita ei ole rediksessä, etsi tietokannasta
+        // jos ei ole rediksessä, etsi tietokannasta
+        featuredProducts = await Product.find({ isFeatured: true }).lean();  
 
-        featuredProducts = await Product.find({Isfeatured: true}).lean();  //etsi kaikki tuotteet MONGO dbstä 
-        // //.lean palauttaa javascript objekteja mongo db dokumentin sijasta
-        //parantaa suorituskykyä
-
-        if(!featuredProducts) {
-            return res.status(404).json({message: "Ei featured- tuotteita"});
+        if (!featuredProducts || featuredProducts.length === 0) {
+            return res.status(404).json({ message: "Ei featured-tuotteita" });
         }
 
-        //tallenntaa redikseen jos löytyy mongosta mutta ei vielä sieltä
-
+        // tallenna redis cacheen
         await redis.set("featured_products", JSON.stringify(featuredProducts));
         res.json(featuredProducts);
 
@@ -45,7 +40,7 @@ export const getFeaturedProducts = async (req, res) => {
 //luodaan tuote tietokantaan ja käytetään cloudinarya kuvien tuomiseen
 export const createProduct = async (req, res) => {
   try {
-    console.log("Request body:", req.body); // Tulostaa saapuvan datan
+    console.log("Request body:", req.body); 
 
     const { name, description, price, image, category } = req.body;
 
@@ -63,6 +58,7 @@ export const createProduct = async (req, res) => {
       price,
       image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
       category,
+      
     });
 
     console.log("Product created:", product);
@@ -74,8 +70,6 @@ export const createProduct = async (req, res) => {
   }
 };
 
-
-
 export const deleteProduct = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
@@ -85,68 +79,47 @@ export const deleteProduct = async (req, res) => {
         }
         
         if(product.image) {
-            const publicId = product.image.split("/").pop().split(".")[0]; //hakee kuvan id:n ja poistaa sen
+            const publicId = product.image.split("/").pop().split(".")[0]; 
             try {
                 await cloudinary.uploader.destroy(`products/${publicId}`)
                 console.log("Kuva poistettu cloudinarystä")
             } catch (error) {
                 console.log("Virhe kuvan poistossa cloudinarystä", error.message);
             }
-
         }
 
         await Product.findByIdAndDelete(req.params.id)
-
-
         res.json({message: "Tuote poistettu onnistuneesti"})
 
     } catch (error) {
-        console.log("Virhe tuotetteen poistocontrollerissa", error.message);
+        console.log("Virhe tuotteen poistocontrollerissa", error.message);
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
-
 }
 
 export const getRecommendedProducts = async (req, res) => {
     try {
         const products = await Product.aggregate([
-            {
-                $sample: {size: 3}
-            },
-            {
-                $project:{
-                    _id: 1,
-                    name: 1,
-                    description: 1,
-                    image : 1,
-                    price: 1
-                }
-            }
+            { $sample: {size: 3} },
+            { $project:{ _id: 1, name: 1, description: 1, image : 1, price: 1 } }
         ])
-
         res.json(products)
-
     } catch (error) {
         console.log("Virhe tuotecontrollerissa", error.message);
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
 }
 
-//hakee tuotteet gaterorioittain
 export const getProductsByCategory = async (req, res) => {
-    
     const {category} = req.params; 
-    
     try {
-        
         const products = await Product.find({category});
-         res.json({ products }); //tässä oli bugi palautti array ei objektia ennen res.json(products);
-
+        res.json({ products }); 
     } catch (error) {
         console.log("Virhe tuotecontrollerissa", error.message);
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
-    }
+}
 
 export const toggleFeaturedProduct = async (req, res) => {
     try {
@@ -154,8 +127,8 @@ export const toggleFeaturedProduct = async (req, res) => {
         if(product) {
             product.isFeatured = !product.isFeatured;
             const updatedProduct = await product.save();
-            // päivitetään cashe - redis
-            await updateFeaturedProductsCashe();
+            // päivitetään cache
+            await updateFeaturedProductsCache();
             res.json(updatedProduct);
         } else {
             res.status(404).json({message: "Tuotetta ei löytynyt"});
@@ -166,12 +139,11 @@ export const toggleFeaturedProduct = async (req, res) => {
     }
 }
 
-async function updateFeaturedProductsCashe() {
+async function updateFeaturedProductsCache() {
     try {
         const featuredProducts = await Product.find({isFeatured: true}).lean();
         await redis.set("featured_products", JSON.stringify(featuredProducts));
     } catch (error) {
-        console.log("Virhe cashen päivittämisessä", error.message);
-        res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+        console.log("Virhe cache:n päivittämisessä", error.message);
     }
 }

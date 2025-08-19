@@ -16,7 +16,7 @@ export const useCartStore = create((set, get) => ({
 			const response = await axios.get("/coupons");
 			set({ coupon: response.data });
 		} catch (error) {
-			console.error("Error fetching coupon:", error);
+			console.error("Virhe haettaessa kuponkia:", error);
 		}
 	},
 	applyCoupon: async (code) => {
@@ -24,9 +24,9 @@ export const useCartStore = create((set, get) => ({
 			const response = await axios.post("/coupons/validate", { code });
 			set({ coupon: response.data, isCouponApplied: true });
 			get().calculateTotals();
-			toast.success("Coupon applied successfully");
+			toast.success("Kuponki aktivoitu onnistuneesti");
 		} catch (error) {
-			toast.error(error.response?.data?.message || "Failed to apply coupon");
+			toast.error(error.response?.data?.message || "Kuponkia ei voitu aktivoida");
 		}
 	},
 	removeCoupon: () => {

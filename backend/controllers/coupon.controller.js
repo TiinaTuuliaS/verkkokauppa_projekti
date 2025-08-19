@@ -19,7 +19,7 @@ export const validateCoupon = async (req, res) => {
         if(!coupon) {
             return res.status(404).json({message: "Kupongia ei löytynyt"}); //kuponkia ei ole olemassa
         }
-        
+        //tarkistaa onko kuponkin päivämäärä vanhentunut
         if(coupon.expirationDate < new Date()) {
             coupon.isActive = false;
             await coupon.save();

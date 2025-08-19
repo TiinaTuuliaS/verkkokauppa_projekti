@@ -59,16 +59,22 @@ const EmptyCartUI = () => (
 		animate={{ opacity: 1, y: 0 }}
 		transition={{ duration: 0.5 }}
 	>
-		<ShoppingCart className="h-24 w-24 text-pink-400" />
-		<h3 className="text-2xl font-semibold text-rose-800">Ostokorisi on tyhjä</h3>
-		<p className="text-pink-400">
-			Näyttää siltä että et {" ole "} lisännyt koriin mitään vielä
+		<ShoppingCart className="h-24 w-24 text-pink-500 drop-shadow-md" />
+
+		<h3 className="text-3xl font-bold text-rose-900 drop-shadow-sm">
+			Ostokorisi on tyhjä
+		</h3>
+
+		<p className="text-gray-600 text-center max-w-md">
+			Näyttää siltä, että et ole lisännyt vielä mitään koriin.
 		</p>
+
 		<Link
-			className="mt-4 rounded-md bg-pink-600 px-6 py-2 text-white transition-colors hover:bg-pink-500"
+			className="mt-6 rounded-lg bg-pink-600 px-6 py-3 text-white font-semibold shadow-md transition hover:bg-pink-500 hover:shadow-lg"
 			to="/"
 		>
-			Aloita shoppailu
+			🚀 Aloita shoppailu
 		</Link>
 	</motion.div>
 );
+

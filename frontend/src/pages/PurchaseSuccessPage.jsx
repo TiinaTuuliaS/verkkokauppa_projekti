@@ -41,9 +41,9 @@ const PurchaseSuccessPage = () => {
       <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
-        gravity={0.1}
+        gravity={0.2}
         style={{ zIndex: 99 }}
-        numberOfPieces={720}
+        numberOfPieces={740}
         recycle={false}
       />
 

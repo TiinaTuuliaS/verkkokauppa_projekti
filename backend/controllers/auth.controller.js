@@ -123,7 +123,8 @@ export const logout = async (req, res) => {
     }
 };
 
-//päivittää sisäänpääsytokenin joka vanhenee 15 minuutissa
+//päivittää sisäänpääsytokenin joka vanhenee 15 minuutissa sekä accesstokenin sivuille, huom tämä hankalaa ja abstraktia aihetta minulle
+//olen opiskellut asiaa udemyn kurssilla ja ehkä hieman jyvällä, tämän kanssa on säädetty ja väännetty
 
 export const refreshToken = async (req, res) => {
     try {

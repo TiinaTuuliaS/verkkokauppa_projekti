@@ -8,13 +8,15 @@ const router = express.Router();
 //analytiikka vain adminille
 router.get("/", protectRoute, adminRoute, async (req, res) => {
 	try {
-		const analyticsData = await getAnalyticsData();
+		const analyticsData = await getAnalyticsData(); //analytiikkadata haetaan
 
 		const endDate = new Date();
-		const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+		const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000); //aikaväli 7 päivää
 
-		const dailySalesData = await getDailySalesData(startDate, endDate);
+		const dailySalesData = await getDailySalesData(startDate, endDate); //haetaan myyntiluvut
 
+
+		//vastaus json muodossa
 		res.json({
 			analyticsData,
 			dailySalesData,

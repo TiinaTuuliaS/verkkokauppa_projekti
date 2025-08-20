@@ -7,10 +7,14 @@ import {
     getRecommendedProducts,
     getProductsByCategory,
     toggleFeaturedProduct
- } from "../controllers/product.controller.js";
+ } from "../controllers/product.controller.js"; //tuotekontrollerin funktiot routeriin
 import { adminRoute, protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
+
+// Luodaan router, johon liitetään kaikki product-reitit
+
+// Tuotereitit, osa suojattu jotta vain admin pääsee niitä käyttämään ja osa vain kirjautuneille käyttäjille
 
 router.get("/", protectRoute, adminRoute, getAllProducts);
 router.get("/featured", getFeaturedProducts);

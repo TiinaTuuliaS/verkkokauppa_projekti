@@ -4,6 +4,10 @@ import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
+// Luodaan router, johon liitetään kaikki cart-reitit
+
+// Ostoskorin reitit:
+
 router.get("/", protectRoute, getCartProducts);
 router.post("/", protectRoute, addToCart);
 router.delete("/", protectRoute, removeAllFromCart);

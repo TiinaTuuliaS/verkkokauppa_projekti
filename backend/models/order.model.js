@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//Tietokantamalli tilaukselle MongoDb tietokantaan
+
 const orderSchema = new mongoose.Schema(
 	{
 		user: {

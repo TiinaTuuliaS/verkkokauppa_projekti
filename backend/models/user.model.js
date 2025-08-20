@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-//luodaan user modeliin kaikki kentät mitä user muuttuja tarvitsee
+//luodaan user modeliin kaikki kentät mitä user muuttuja tarvitsee tietokantaan MongoDB
+
 const userSchema = new mongoose.Schema({
     name:{
         type: String,
@@ -60,12 +61,13 @@ userSchema.pre("save", async function (next) {
 })
 
 //metodi salasanojen vertailemiseen oikein/väärin
+
 userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);
 
 };
 
-// user model rakennetaan
+// user model rakennetaan tietokantaan
 
 const User = mongoose.model("User", userSchema);
 

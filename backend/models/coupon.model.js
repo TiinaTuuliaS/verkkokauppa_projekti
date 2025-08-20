@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//Luodaan tietokantamalli kuponille MongoDb tietokantaan
+
 const couponSchema = new mongoose.Schema(
     {
         code: {

@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//Luodaan tietokantamalli tuotteelle MongoDb tietokantaan
+
 const productSchema = new mongoose.Schema({
     name: {
         type: String,

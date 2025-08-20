@@ -65,7 +65,7 @@ refreshToken: async () => {
 	// Estetään useampi samanaikainen refresh-pyyntö tokenille
 	if (get().checkingAuth) return;
 
-	// Merkitään, että tarkistetaan parhaillaan käyttäjän autentikaatiota
+	// Merkitään, että tarkistetaan käyttäjän autentikaatiota
 	set({ checkingAuth: true });
 
 	try {
@@ -90,7 +90,7 @@ refreshToken: async () => {
 
 }));
 
-// Axios interceptor tokenin uusimiseen 
+// Axios interceptor tokenin uusimiseen kun token vanhenee 15 minuutin kuluttua
 
 let refreshPromise = null; // Muuttuja, jolla varmistetaan ettei useita refresh-pyyntöjä tehdä samaan aikaan
 

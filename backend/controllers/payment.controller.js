@@ -2,15 +2,21 @@ import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
 import { stripe } from "../lib/stripe.js";
 
+//Stripen käyttäminen minulle aivan uutta, olen opiskellut asiaa youtube-videoilla sekä udemyssä stripe-kurssilla
+
+//Funktio joka luo Stripe-checkout istunnon (session)
+
 export const createCheckoutSession = async (req, res) => {
 	try {
 		const { products, couponCode } = req.body;
-
+		//tarkistetaan että tuotteet ovat array muodossa
 		if (!Array.isArray(products) || products.length === 0) {
 			return res.status(400).json({ error: "Tuotearray ei toimi" });
 		}
 
 		let totalAmount = 0;
+
+		//tuotteet line items muotoon stripeä varten
 
 		const lineItems = products.map((product) => {
 			const amount = Math.round(product.price * 100); // stripe haluaa summan centteinä
@@ -29,7 +35,7 @@ export const createCheckoutSession = async (req, res) => {
 			};
 		});
 
-//käyttäjän kupongin tarkistus
+//käyttäjän kupongin tarkistus ja alennuksen antaminen jos kuponki löytyy
 
 		let coupon = null;
 		if (couponCode) {
@@ -39,14 +45,14 @@ export const createCheckoutSession = async (req, res) => {
 			}
 		}
 
-//ostoskorinäkymä ''session''
+//ostoskorinäkymä ''session'' luodaan
 
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ["card"],
 			line_items: lineItems,
 			mode: "payment",
-			success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-			cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+			success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`, //onnistuneen ostoksen näkymä
+			cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`, //peruutetun ostoksen näkymä
 			discounts: coupon
 				? [
 						{
@@ -66,7 +72,8 @@ export const createCheckoutSession = async (req, res) => {
 				),
 			},
 		});
-//asiakas saa uuden kupongin jos ostaa 200€ tai enemmän
+
+//asiakas saa kupongin jos ostaa 200€ tai enemmän
 		if (totalAmount >= 20000) {
 			await createNewCoupon(req.user._id);
 		}
@@ -76,6 +83,8 @@ export const createCheckoutSession = async (req, res) => {
 		res.status(500).json({ message: "Virhe checkoutissa", error: error.message });
 	}
 };
+
+//Onnnistuneen maksutapahtuman funktio
 
 export const checkoutSuccess = async (req, res) => {
 	try {

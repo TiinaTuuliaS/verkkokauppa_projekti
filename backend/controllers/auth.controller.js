@@ -4,23 +4,26 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 
-
+// Funktio generoi access- ja refresh-tokenit käyttäjälle
 
 const generateTokens = (userId) => {
     const accessToken = jwt.sign({ userId}, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "15m",
+        expiresIn: "15m", //accesstoken voimassa 15 minuuttia
     })
 
     const refreshToken = jwt.sign({ userId}, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: "7d",
+        expiresIn: "7d", //refreshtoken voimassa 7 päivää
     })
 
     return { accessToken, refreshToken };
 };
 
+//tallennetaan redis-tietokantaan testattu ja tarkistettu, ks upstash
 const storeRefreshToken = async(userId, refreshToken) => {
     await redis.set(`refresh_token:${userId}`, refreshToken, "EX",7*24*60*60); // token voimassa 7päivää
 }
+
+// Asetetaan access- ja refresh-tokenit evästeiksi (cookies)
 
 const setCookies = (res, accessToken, refreshToken) => {
     res.cookie("accessToken", accessToken, {
@@ -39,7 +42,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 };
 
-//käyttäjä luodaan
+//käyttäjän rekisteröinti
 export const signup = async (req, res) => {
     const { email, password, name } = req.body;
     try {
@@ -50,12 +53,12 @@ export const signup = async (req, res) => {
     }
     const user = await User.create({name,email,password});
 
-    // authenticate user, luodaan tokenit
+    // käyttäjä autentikoidaan ja luodaan tokenit
 
     const {accessToken, refreshToken} = generateTokens(user._id);
     await storeRefreshToken(user._id, refreshToken);
 
-    //luodaan cookiet
+    //asetetaan cookiet
 
     setCookies(res, accessToken, refreshToken);
 
@@ -68,19 +71,21 @@ export const signup = async (req, res) => {
     }, message: "Käyttäjä luotu onnistuneesti!"
 });
     } catch (error) {
-        console.log("Virhe sign up controllerissa", error.message);
+        console.log("Virhe sign up controllerissa", error.message); //kehittäessä testattu mahdollisia virheitä console logilla
         res.status(500).json({ message: error.message });
     }
 
     
 }
 
+//Käyttäjän kirjautumisen funktio
+
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         
-
+        //tarkistetaan täsmääkö käyttäjän salasana
         if(user && (await user.comparePassword(password))) {
             const {accessToken, refreshToken} = generateTokens(user._id);
             //console.log("user is logged in"); testattu loginin toimivuutta 
@@ -104,15 +109,17 @@ export const login = async (req, res) => {
     }
 }
 
+//Uloskirjautumisen funktio
+
 export const logout = async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken;
         if(refreshToken){
-            const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+            const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET); //refreshtoken poistetaan rediksestä
             await redis.del(`refresh_token:${decoded.userId}`);
            
         }
-
+        //evästeiden poistaminen
         res.clearCookie("accessToken");
         res.clearCookie("refreshToken");
         
@@ -126,6 +133,8 @@ export const logout = async (req, res) => {
 //päivittää sisäänpääsytokenin joka vanhenee 15 minuutissa sekä accesstokenin sivuille, huom tämä hankalaa ja abstraktia aihetta minulle
 //olen opiskellut asiaa udemyn kurssilla ja ehkä hieman jyvällä, tämän kanssa on säädetty ja väännetty
 
+// Päivittää access-tokenin refresh-tokenin avulla
+
 export const refreshToken = async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken;
@@ -136,6 +145,7 @@ export const refreshToken = async (req, res) => {
         const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         const storedToken = await redis.get(`refresh_token:${decoded.userId}`);
 
+        //tarkistetaan että token vastaa tallennettua refreshtokenia
         if(storedToken !== refreshToken) {
             return res.status(401).json({message: "Ei vastaavaa refresh tokenia"});
         }
@@ -157,6 +167,8 @@ export const refreshToken = async (req, res) => {
         
     }
 }
+
+// Hakee kirjautuneen käyttäjän profiilitiedot
 
 export const getProfile = async (req, res) => {
 	try {

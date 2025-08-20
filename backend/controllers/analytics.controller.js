@@ -2,9 +2,13 @@ import Order from "../models/order.model.js";
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
 
+//Funktio joka palauttaa perusanalytiikan tiedot (käyttäjät, tuotteet, myynnit, liikevaihto)
+
 export const getAnalyticsData = async () => {
-	const totalUsers = await User.countDocuments(); //kävijöiden määrä sivustolla
+	const totalUsers = await User.countDocuments(); //käyttäjien määrä sivustolla
 	const totalProducts = await Product.countDocuments(); //tuotteiden määrä
+
+	//käytetään MongoDb ''pipelineä'' myyntidatan saamiseksi aggregate metodilla
 
 	const salesData = await Order.aggregate([
 		{
@@ -16,7 +20,9 @@ export const getAnalyticsData = async () => {
 		},
 	]);
 
-	const { totalSales, totalRevenue } = salesData[0] || { totalSales: 0, totalRevenue: 0 }; //muodostaa datan analyysia varten
+	// Jos ei löytynyt yhtään tilausta, palautetaan nollat
+
+	const { totalSales, totalRevenue } = salesData[0] || { totalSales: 0, totalRevenue: 0 }; 
 
 	return {
 		users: totalUsers,
@@ -27,7 +33,9 @@ export const getAnalyticsData = async () => {
 };
 
 //tämän analytiikkaosion kanssa taistelemisessa ja ymmärtämisessä meni kauan, koska data mongodb syntax muodossa ja olen
-//käyttänyt sitä tosi vähän, mutta kuitenkin onnistui.
+//käyttänyt sitä tosi vähän, mutta kuitenkin onnistui. Aggregate minulle myös uutta, mutta aina mielenkiiutoista oppia.
+
+// Funktio joka palauttaa myynti- ja liikevaihtodataa päivittäin annettujen päivämäärien väliltä
 
 export const getDailySalesData = async (startDate, endDate) => {
 	try {
@@ -35,19 +43,19 @@ export const getDailySalesData = async (startDate, endDate) => {
 			{
 				$match: {
 					createdAt: {
-						$gte: startDate,
+						$gte: startDate, //tilaukset tällä aikavälillä
 						$lte: endDate,
 					},
 				},
 			},
 			{
 				$group: {
-					_id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-					sales: { $sum: 1 },
-					revenue: { $sum: "$totalAmount" },
+					_id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, //päivämäärän mukaan ryhmittely
+					sales: { $sum: 1 }, //tilausten määärä päivässä
+					revenue: { $sum: "$totalAmount" }, //liikevaihto päivässä
 				},
 			},
-			{ $sort: { _id: 1 } },
+			{ $sort: { _id: 1 } }, //aikajärjestys
 		]);
 
 		// esimerkki dailySalesData datasta arrayssa
@@ -65,6 +73,8 @@ export const getDailySalesData = async (startDate, endDate) => {
 		return dateArray.map((date) => {
 			const foundData = dailySalesData.find((item) => item._id === date);
 
+			// Palautetaan jokaiselle päivälle sales ja revenue (0 jos ei löytynyt myyntiä)
+
 			return {
 				date,
 				sales: foundData?.sales || 0,
@@ -75,6 +85,8 @@ export const getDailySalesData = async (startDate, endDate) => {
 		throw error;
 	}
 };
+
+// Luo päivämääräarrayn annetun aikavälin sisällä (yyyy-mm-dd muodossa)
 
 function getDatesInRange(startDate, endDate) {
 	const dates = [];

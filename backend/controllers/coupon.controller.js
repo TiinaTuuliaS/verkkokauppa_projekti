@@ -1,5 +1,6 @@
 import Coupon from "../models/coupon.model.js";
 
+//Funktio joka hakee käyttäjälle voimassaolevan kupongin
 
 export const getCoupon = async (req, res) => {
     try {
@@ -10,6 +11,8 @@ export const getCoupon = async (req, res) => {
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
 };
+
+//Funktio validoi eli aktivoi käyttäjän syöttämän kuponkikoodin
 
 export const validateCoupon = async (req, res) => {
     try {

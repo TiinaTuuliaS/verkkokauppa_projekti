@@ -1,6 +1,8 @@
 import Product from "../models/product.model.js";
 import { redis } from "../lib/redis.js";
-import cloudinary from '../lib/cloudinary.js';
+import cloudinary from '../lib/cloudinary.js'; //cloudinaryyn tallentuu sovelluksen kuvat
+
+//funktio joka hakee kaikki tuotteet tietokannasta
 
 export const getAllProducts = async (req, res) => {
     try {
@@ -12,12 +14,14 @@ export const getAllProducts = async (req, res) => {
     }
 };    
 
+//Funktio hakee featured tuotteet redis cashesta
+
 export const getFeaturedProducts = async (req, res) => {
     try {
         let featuredProducts = await redis.get("featured_products"); 
 
         if (featuredProducts) {
-            return res.json(JSON.parse(featuredProducts));
+            return res.json(JSON.parse(featuredProducts)); //palautetaan rediksestä
         }
 
         // jos ei ole rediksessä, etsi tietokannasta
@@ -27,7 +31,7 @@ export const getFeaturedProducts = async (req, res) => {
             return res.status(404).json({ message: "Ei featured-tuotteita" });
         }
 
-        // tallenna redis cacheen
+        // tallenna featured ominaisuus redis cacheen
         await redis.set("featured_products", JSON.stringify(featuredProducts));
         res.json(featuredProducts);
 
@@ -37,7 +41,7 @@ export const getFeaturedProducts = async (req, res) => {
     }
 };
 
-//luodaan tuote tietokantaan ja käytetään cloudinarya kuvien tuomiseen
+//luodaan tuote tietokantaan ja ladataan kuva cloudinaryyn
 export const createProduct = async (req, res) => {
   try {
     console.log("Request body:", req.body); 
@@ -47,11 +51,12 @@ export const createProduct = async (req, res) => {
     let cloudinaryResponse = null;
 
     if (image) {
-      console.log("Uploading image to Cloudinary...");
+      console.log("Uploading image to Cloudinary..."); //tuotteen kuvan lataus cloudinaryn pilveen, uutta minulle
       cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
       console.log("Cloudinary response:", cloudinaryResponse);
     }
 
+    //tuote luodaan tietokantaan
     const product = await Product.create({
       name,
       description,
@@ -61,7 +66,7 @@ export const createProduct = async (req, res) => {
       
     });
 
-    console.log("Product created:", product);
+    console.log("Tuote luotu:", product);
 
     res.status(201).json(product);
   } catch (error) {
@@ -69,6 +74,8 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
   }
 };
+
+//Tuotteen poistamisen funktio ja kuvan poistaminen Cloudinarysta
 
 export const deleteProduct = async (req, res) => {
     try {
@@ -97,6 +104,8 @@ export const deleteProduct = async (req, res) => {
     }
 }
 
+//Hakee satunnaisesti kolme suositeltua tuotetta ostoskorinäkymään
+
 export const getRecommendedProducts = async (req, res) => {
     try {
         const products = await Product.aggregate([
@@ -110,6 +119,8 @@ export const getRecommendedProducts = async (req, res) => {
     }
 }
 
+//Funktio joka hakee tuotteen tietystä gategoriasta
+
 export const getProductsByCategory = async (req, res) => {
     const {category} = req.params; 
     try {
@@ -120,6 +131,8 @@ export const getProductsByCategory = async (req, res) => {
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
 }
+
+//Tuotteen feature-ominaisuuden funktio ja redis cashen päivittäminen
 
 export const toggleFeaturedProduct = async (req, res) => {
     try {
@@ -138,6 +151,8 @@ export const toggleFeaturedProduct = async (req, res) => {
         res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
     }
 }
+
+//Funktio joka päivittää featured tuotteiden redis cashen -redis uutta minulle kiva päästä tähän tutustumaan
 
 async function updateFeaturedProductsCache() {
     try {

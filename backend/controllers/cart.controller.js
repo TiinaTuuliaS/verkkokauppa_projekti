@@ -1,5 +1,7 @@
 import Product from "../models/product.model.js";
 
+// Hakee kirjautuneen käyttäjän ostoskorin tuotteet
+
 export const getCartProducts = async (req, res) => {
     try {
         const products = await Product.find({ _id: { $in: req.user.cartItems } });
@@ -20,6 +22,8 @@ export const getCartProducts = async (req, res) => {
     }
 };
 
+//Tuotteen ostoskoriin lisäämisen funktio
+
 export const addToCart = async (req, res) => {
 try {
     const {productId} = req.body;
@@ -27,9 +31,9 @@ try {
 
     const existingItem = user.cartItems.find((item) => item.id === productId);
     if(existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += 1; //määrää kasvatetaan yhdellä
     } else {
-        user.cartItems.push(productId);
+        user.cartItems.push(productId); //tuote lisätään ostoskoriin
     }
 
     await user.save();
@@ -43,15 +47,17 @@ try {
 
 };
 
+//Funktio joka poistaa tuotteet ostoskorista
+
 export const removeAllFromCart = async (req, res) => {
     try {
         const {productId} = req.body;
         const user = req.user;
         
         if (!productId) {
-            user.cartItems = [];
+            user.cartItems = []; //koko ostoskori tyhjennetään
         } else {
-            user.cartItems = user.cartItems.filter((item) => item.id !== productId);
+            user.cartItems = user.cartItems.filter((item) => item.id !== productId); //vain tietty tuote poistetaan
         }
         await user.save();
         res.json(user.cartItems)
@@ -63,21 +69,23 @@ export const removeAllFromCart = async (req, res) => {
     
     };
 
+//Tuotteen määrän pävitys ostoskorissa
+
 export const updateQuantity = async (req, res) => {
     try {
-        const {id:productId} = req.params;
-        const {quantity} = req.body;
+        const {id:productId} = req.params; //tuotteen id url parametrinä
+        const {quantity} = req.body; //uusi määrä
         const user = req.user;
         const existingItem = user.cartItems.find((item) => item.id === productId);
 
         if(existingItem) {
             if(quantity === 0) {
-                user.cartItems = user.cartItems.filter((item) => item.id !== productId);
+                user.cartItems = user.cartItems.filter((item) => item.id !== productId); //jos määrä on 0 tuote poistetaan korista
                 await user.save();
                 return res.json(user.cartItems);
             } 
                 
-            
+            //määrän päivitys
             existingItem.quantity = quantity;
             await user.save();
             res.json(user.cartItems);

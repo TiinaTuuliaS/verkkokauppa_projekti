@@ -2,6 +2,8 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import axios from "../lib/axios";
 
+//Frontin ja apin "välittäjät" note to self
+
 export const useProductStore = create((set) => ({
     products: [],
     featuredProducts: [],   // <-- oma tila suosikeille
@@ -92,3 +94,21 @@ export const useProductStore = create((set) => ({
         }
     },
 }));
+
+
+//tuotteen muokkaus - jatkokehitysidea luodaan useproductstore olion sisälle metodina, päivitykset myös ProductList komponenttiin
+//UpdateProduct: async (id, updatedData) => {
+/*   try {
+    const res = await fetch(`/api/products/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    });
+    const data = await res.json();
+    set((state) => ({
+      products: state.products.map((p) => (p._id === id ? data : p)),
+    }));
+  } catch (error) {
+    console.error("Update failed", error);
+  }
+},** */

@@ -5,6 +5,9 @@ import { useProductStore } from "../stores/useProductStore";
 const ProductsList = () => {
 	const { deleteProduct, toggleFeaturedProduct, products } = useProductStore();
 
+	// const [editingProduct, setEditingProduct] = useState(null); const handleEdit = (product) => { setEditingProduct(product); };
+	// esimerkki tilamuuttujasta tuotteen muokkaustoimintoa varten ei valmis
+
 	return (
 		<motion.div
 			className='bg-pink-50 shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto'

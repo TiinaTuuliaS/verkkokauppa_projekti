@@ -1,6 +1,6 @@
 
 
-# Dreamland - Verkkokauppa
+# Dreamland - Verkkokauppa - Näyttötyö
 
 Dreamland on yksinkertainen verkkokauppasovellus, joka on suunnattu noin 25–40-vuotiaille kuluttajille jotka ovat kinnostuneita trendikkäistä koruista.  Sovelluksessa käyttäjä voi luoda tilin, kirjautua sisään, 
 selata tuotteita kategorioittain ja lisätä niitä ostoskoriin ja viedä ostotapahtuman loppuun.  
@@ -21,6 +21,7 @@ Admin Dashboardilta ylläpitäjä näkee myös viimeiakaisen myyntidatan.
   - Tuotelistaus kategorioittain
   - Featured-tuotteiden esittäminen etusivulla
   - Ostoskoriin lisääminen
+  
 - **Ostoskori**
   - Tuotteiden tarkastelu
   - Tuotteiden poistaminen
@@ -38,7 +39,7 @@ Admin Dashboardilta ylläpitäjä näkee myös viimeiakaisen myyntidatan.
 
 ## Teknologiat
 
-Backend
+### Backend
 
 | Teknologia        | Käyttötarkoitus |
 |-------------------|-----------------|
@@ -55,7 +56,7 @@ Backend
 | **Nodemon** (dev) | Kehitystyökalu, joka käynnistää serverin automaattisesti uudelleen koodin muuttuessa |
 
 
-Frontti
+### Frontend
 
 | Teknologia             | Käyttötarkoitus |
 |------------------------|-----------------|

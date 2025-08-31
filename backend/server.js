@@ -35,13 +35,15 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
-app.use(express.static(path.join(__dirname, "frontend/dist")));
+// Staattiset tiedostot React buildista vain tuotannossa
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
-});
-
-
+  // Kaikki muut GET-pyynnöt Reactille (ohittaa /api-reitit)
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+  });
+}
 
 // Yhteys tietokantaan
 connectDB();

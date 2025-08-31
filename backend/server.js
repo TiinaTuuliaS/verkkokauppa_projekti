@@ -35,16 +35,16 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
-// Staattiset tiedostot tuotannossa
 if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "frontend", "dist");
-  app.use(express.static(frontendPath));
+  // Staattiset tiedostot
+  app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-  // Kaikki muut GET-pyynnöt ohjataan Reactille
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
+  // Catch-all vain frontendin reiteille, API-reitit ohitetaan 
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
   });
 }
+
 
 // Yhteys tietokantaan
 connectDB();

@@ -4,7 +4,6 @@ import CategoryItem from "../components/CategoryItem";
 import FeaturedProducts from "../components/FeaturedProducts";
 import { useProductStore } from "../stores/useProductStore";
 
-// Tuotekategoriat
 const categories = [
   { href: "/korvakorut", name: "Korvakorut", imageUrl: "/korvakoru1.jpg" },
   { href: "/sormukset", name: "Sormukset", imageUrl: "/sormus1.jpg" },
@@ -13,6 +12,7 @@ const categories = [
   { href: "/rannekorut", name: "Rannekorut", imageUrl: "/rannekoru1.jpg" },
   { href: "/kaulakorut", name: "Kaulakorut", imageUrl: "/kaulakoru1.jpg" },
 ];
+
 
 const HomePage = () => {
   const { fetchFeaturedProducts, featuredProducts, loading } = useProductStore();
@@ -63,3 +63,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

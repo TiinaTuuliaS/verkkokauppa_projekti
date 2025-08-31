@@ -23,8 +23,8 @@ const PORT = process.env.PORT || 5000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.json({ limit: "10mb" })); // 10mb tiedostojen koko rajoitus http-pyynnöissä esim. post ja put
-app.use(cookieParser()); // Käytetään evästeiden käsittelyä, esim. autentikointiin
+app.use(express.json({ limit: "10mb" }));
+app.use(cookieParser());
 
 // Reittien liittäminen sovellukseen
 app.use("/api/auth", authRoutes);
@@ -36,7 +36,6 @@ app.use("/api/analytics", analyticsRoutes);
 
 // Production build (Render)
 if (process.env.NODE_ENV === "production") {
-  // Palvellaan frontendin build kansiosta
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   // React catch-all route

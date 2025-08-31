@@ -4,27 +4,24 @@ import { getAnalyticsData, getDailySalesData } from "../controllers/analytics.co
 
 const router = express.Router();
 
-
-//analytiikka vain adminille
+// analytiikka vain adminille
 router.get("/", protectRoute, adminRoute, async (req, res) => {
-	try {
-		const analyticsData = await getAnalyticsData(); //analytiikkadata haetaan
+  try {
+    const analyticsData = await getAnalyticsData();
 
-		const endDate = new Date();
-		const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000); //aikaväli 7 päivää
+    const endDate = new Date();
+    const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 päivää
 
-		const dailySalesData = await getDailySalesData(startDate, endDate); //haetaan myyntiluvut
+    const dailySalesData = await getDailySalesData(startDate, endDate);
 
-
-		//vastaus json muodossa
-		res.json({
-			analyticsData,
-			dailySalesData,
-		});
-	} catch (error) {
-		console.log("Virhe analytiikka controllerissa", error.message);
-		res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
-	}
+    res.json({
+      analyticsData,
+      dailySalesData,
+    });
+  } catch (error) {
+    console.log("Virhe analytiikka controllerissa", error.message);
+    res.status(500).json({ message: "Serveri ei vastaa", error: error.message });
+  }
 });
 
 export default router;

@@ -18,7 +18,7 @@ const ProductsList = () => {
 			<table className='min-w-full divide-y divide-pink-200'>
 				<thead className='bg-pink-100'>
 					<tr>
-						{["Product", "Price", "Category", "Featured", "Actions"].map((heading) => (
+						{["Tuote", "Hinta", "Kategoria", "Esittelyssä", "Poista"].map((heading) => (
 							<th
 								key={heading}
 								scope='col'

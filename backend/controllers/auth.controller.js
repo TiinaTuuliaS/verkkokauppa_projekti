@@ -18,7 +18,7 @@ const generateTokens = (userId) => {
     return { accessToken, refreshToken };
 };
 
-//tallennetaan redis-tietokantaan testattu ja tarkistettu, ks upstash
+//tallennetaan redis-välimuistiin testattu ja tarkistettu, ks upstash
 const storeRefreshToken = async(userId, refreshToken) => {
     await redis.set(`refresh_token:${userId}`, refreshToken, "EX",7*24*60*60); // token voimassa 7päivää
 }

@@ -46,7 +46,7 @@ export const useCartStore = create((set, get) => ({
 		}
 	},
 
-	
+	//ostoskorin tyhjennys kun x tapahtuma tapahtuu
 	clearCart: async () => {
 		set({ cart: [], coupon: null, total: 0, subtotal: 0 });
 	},
@@ -93,6 +93,7 @@ export const useCartStore = create((set, get) => ({
 	},
 
 	//laskee ostoskorin kokonaisumman 
+
 	calculateTotals: () => {
 		const { cart, coupon } = get();
 		const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
